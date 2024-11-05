@@ -34,7 +34,7 @@ mydb.close()
 
 
 def main():
-    st.title("YOUR SMART BUSINESS INSIGHT ENGINE")
+    st.title("SMART BUSINESS INSIGHT ENGINE")
     menu = ["Add", "View", "Edit", "Remove"]
     choice = st.sidebar.selectbox("Menu", menu)
 
