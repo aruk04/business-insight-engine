@@ -12,7 +12,7 @@ c = mydb.cursor()
 # Function to create the Business table if it doesn't already exist
 def create_table():
     c.execute('''
-        CREATE TABLE IF NOT EXISTS BUSINESS(
+        CREATE TABLE IF NOT EXISTS Business(
             B_ID VARCHAR(50) PRIMARY KEY,
             B_Name VARCHAR(100),
             L_Name VARCHAR(100),
@@ -62,7 +62,7 @@ def create_table():
                     FOREIGN KEY (A_ID) REFERENCES ANALYSTS(A_ID)
                    );''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS CONTRACTS (
+    c.execute('''CREATE TABLE IF NOT EXISTS Contracts (
                     Con_ID VARCHAR(50) PRIMARY KEY,
                     Con_Type VARCHAR(50),
                     Validity_period INT,
@@ -72,7 +72,7 @@ def create_table():
                     FOREIGN KEY (I_ID) REFERENCES INVESTORS(I_ID)
                    );''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS LEGAL_ADVISORY (
+    c.execute('''CREATE TABLE IF NOT EXISTS Legal_Advisory (
                     L_ID VARCHAR(50) PRIMARY KEY,
                     Adv_Name VARCHAR(100),
                     L_Experience INT,
@@ -81,7 +81,7 @@ def create_table():
                     FOREIGN KEY (Con_ID) REFERENCES CONTRACTS(Con_ID)
                    );''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS PARTNERSHIP (
+    c.execute('''CREATE TABLE IF NOT EXISTS Partnership (
                     P_ID VARCHAR(50) PRIMARY KEY,
                     P_Name VARCHAR(100),
                     P_Type VARCHAR(50),
@@ -90,7 +90,7 @@ def create_table():
                     FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
                    );''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS VENDOR_SUPPLIER (
+    c.execute('''CREATE TABLE IF NOT EXISTS Vendor_Supplier (
                     V_ID VARCHAR(50) PRIMARY KEY,
                     V_Name VARCHAR(100),
                     V_Type VARCHAR(50),
@@ -101,7 +101,7 @@ def create_table():
                     FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
                    );''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS LOCATION (
+    c.execute('''CREATE TABLE IF NOT EXISTS Location (
                     LOC_ID VARCHAR(50) PRIMARY KEY,
                     L_Name VARCHAR(100),
                     Market_potential VARCHAR(50),
@@ -110,7 +110,7 @@ def create_table():
                     FOREIGN KEY (V_ID) REFERENCES VENDOR_SUPPLIER(V_ID)
                    );''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS BENEFICIARY (
+    c.execute('''CREATE TABLE IF NOT EXISTS Beneficiary (
                     Ben_ID VARCHAR(50) PRIMARY KEY,
                     Ben_Name VARCHAR(100),
                     Age INT,
