@@ -1,44 +1,34 @@
-import streamlit as st
-import mysql.connector
-
-
+import streamlit as st  # type: ignore
+import mysql.connector  # type: ignore
+import pandas as pd  # type: ignore
 from create import create
-from database import create_table
+from database import create_table, fetch_recommendations
 from delete import delete
 from read import read
 from update import update
 
-import mysql.connector
+# Database connection
 mydb = mysql.connector.connect(
-host="localhost",
-database="sbie",
-user="root",
-password="arushisql@p35"
+    host="localhost",
+    database="sbie",
+    user="root",
+    password="arushisql@p35"
 )
 
-
-# Create a cursor to interact with the database
-c = mydb.cursor()
-
-# Sample query to read data from a table (replace 'your_table' with the actual table name)
-c.execute("SELECT * FROM business")
-
-# Fetch and print all rows from the table
-rows = c.fetchall()
-for row in rows:
-    print(row)
-
-# Close the cursor and connection
-c.close()
-mydb.close()
-
+def get_first_two_letters(business_id):
+    """
+    Extracts the first two letters of the business ID,
+    ignoring any underscore and numbers.
+    """
+    return ''.join([char for char in business_id[:2] if char.isalpha()])
 
 def main():
     st.title("SMART BUSINESS INSIGHT ENGINE")
-    menu = ["Add", "View", "Edit", "Remove"]
+    menu = ["Add", "View", "Edit", "Remove", "Give Recommendations"]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    create_table()
+    create_table()  # Ensure tables are created if they don't exist
+
     if choice == "Add":
         st.subheader("Enter Business Details:")
         create()
@@ -55,9 +45,51 @@ def main():
         st.subheader("Delete created details")
         delete()
 
-    else:
-        st.subheader("About tasks")
-
+    elif choice == "Give Recommendations":
+        st.subheader("Business Recommendations")
+        business_id = st.text_input("Enter Business ID for Recommendations:")
+        
+        if st.button("Fetch Recommendations"):
+            if business_id:
+                # Extract the first two letters for recommendation filtering
+                first_two_letters = get_first_two_letters(business_id)
+                recommendations = fetch_recommendations(first_two_letters)
+                
+                if recommendations:
+                    # Display each entity's records in separate tables
+                    for table, records in recommendations.items():
+                        if records:
+                            st.write(f"**{table}**")
+                            
+                            # Convert records to DataFrame with column names based on the table
+                            if table == "Competitors":
+                                df = pd.DataFrame(records, columns=["Competitor Name"])
+                            elif table == "Analysts":
+                                df = pd.DataFrame(records, columns=["Analyst Name"])
+                            elif table == "Investors":
+                                df = pd.DataFrame(records, columns=["Investor Name"])
+                            elif table == "Partnerships":
+                                df = pd.DataFrame(records, columns=["Partner Name"])
+                            elif table == "Contracts":
+                                df = pd.DataFrame(records, columns=["Contract ID", "Contract Type", "Validity Period", "Investor ID"])
+                            elif table == "Legal_Advisory":
+                                df = pd.DataFrame(records, columns=["Legal Advisor ID", "Advisor Name", "Experience", "Jurisdiction"])
+                            elif table == "Vendor_Suppliers":
+                                df = pd.DataFrame(records, columns=["Vendor ID", "Vendor Name", "Type", "Budget", "Quality", "Location"])
+                            elif table == "Locations":
+                                df = pd.DataFrame(records, columns=["Location ID", "Location Name", "Market Potential", "Region"])
+                            elif table == "Beneficiaries":
+                                df = pd.DataFrame(records, columns=["Beneficiary ID", "Name", "Age", "DOB", "Lease Term", "Email", "Phone", "Owner"])
+                            
+                            # Display the DataFrame in Streamlit as a table
+                            st.dataframe(df)  # Or use st.table(df) for a static table
+                        else:
+                            st.write(f"**{table}**")
+                            st.write("No records found.")
+                else:
+                    st.write("No recommendations found for this Business ID.")
+            else:
+                st.write("Please enter a Business ID.")
 
 if __name__ == '__main__':
     main()
