@@ -22,6 +22,106 @@ def create_table():
             Phone VARCHAR(15)
         )
     ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS Competitors (
+            C_ID VARCHAR(50) PRIMARY KEY,
+            C_Name VARCHAR(100),
+            Industry_type VARCHAR(50),
+            Prod_Sold INT,
+            B_ID VARCHAR(50),
+            FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+        )
+    ''')
+    
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS Analysts (
+            A_ID VARCHAR(50) PRIMARY KEY,
+            A_Name VARCHAR(100),
+            Success_rate DECIMAL(5, 2),
+            Experience INT,
+            Salary DECIMAL(10, 2),
+            B_ID VARCHAR(50),
+            FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+        )
+    ''')
+    
+    c.execute('''CREATE TABLE IF NOT EXISTS Investors (
+                    I_ID VARCHAR(50) PRIMARY KEY,
+                    I_Name VARCHAR(100),
+                    Industry_pref VARCHAR(50),
+                    Budget DECIMAL(15, 2),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                    );''')
+    
+    c.execute(''' CREATE TABLE IF NOT EXISTS Trends(
+                    T_Type VARCHAR(50),
+                    Duration INT,
+                    Impact_level VARCHAR(50),
+                    A_ID VARCHAR(50),
+                    FOREIGN KEY (A_ID) REFERENCES ANALYSTS(A_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS CONTRACTS (
+                    Con_ID VARCHAR(50) PRIMARY KEY,
+                    Con_Type VARCHAR(50),
+                    Validity_period INT,
+                    B_ID VARCHAR(50),
+                    I_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID),
+                    FOREIGN KEY (I_ID) REFERENCES INVESTORS(I_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS LEGAL_ADVISORY (
+                    L_ID VARCHAR(50) PRIMARY KEY,
+                    Adv_Name VARCHAR(100),
+                    L_Experience INT,
+                    Jurisdiction VARCHAR(100),
+                    Con_ID VARCHAR(50),
+                    FOREIGN KEY (Con_ID) REFERENCES CONTRACTS(Con_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS PARTNERSHIP (
+                    P_ID VARCHAR(50) PRIMARY KEY,
+                    P_Name VARCHAR(100),
+                    P_Type VARCHAR(50),
+                    P_Industry VARCHAR(50),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS VENDOR_SUPPLIER (
+                    V_ID VARCHAR(50) PRIMARY KEY,
+                    V_Name VARCHAR(100),
+                    V_Type VARCHAR(50),
+                    Budget DECIMAL(15, 2),
+                    Quality VARCHAR(50),
+                    V_loc VARCHAR(100),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS LOCATION (
+                    LOC_ID VARCHAR(50) PRIMARY KEY,
+                    L_Name VARCHAR(100),
+                    Market_potential VARCHAR(50),
+                    Region VARCHAR(100),
+                    V_ID VARCHAR(50),
+                    FOREIGN KEY (V_ID) REFERENCES VENDOR_SUPPLIER(V_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS BENEFICIARY (
+                    Ben_ID VARCHAR(50) PRIMARY KEY,
+                    Ben_Name VARCHAR(100),
+                    Age INT,
+                    DOB DATE,
+                    Lease_Term INT,
+                    Mail VARCHAR(100),
+                    Phone VARCHAR(15),
+                    Owner VARCHAR(100),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                   );''')
 
 # Function to add a new business record
 def add_data(b_id, b_name, l_name, f_name, b_type, oo_mail, phone):
