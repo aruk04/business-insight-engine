@@ -1,5 +1,5 @@
 # pip install mysql-connector-python
-import mysql.connector
+import mysql.connector #type: ignore
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -22,6 +22,106 @@ def create_table():
             Phone VARCHAR(15)
         )
     ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS Competitors (
+            C_ID VARCHAR(50) PRIMARY KEY,
+            C_Name VARCHAR(100),
+            Industry_type VARCHAR(50),
+            Prod_Sold INT,
+            B_ID VARCHAR(50),
+            FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+        )
+    ''')
+    
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS Analysts (
+            A_ID VARCHAR(50) PRIMARY KEY,
+            A_Name VARCHAR(100),
+            Success_rate DECIMAL(5, 2),
+            Experience INT,
+            Salary DECIMAL(10, 2),
+            B_ID VARCHAR(50),
+            FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+        )
+    ''')
+    
+    c.execute('''CREATE TABLE IF NOT EXISTS Investors (
+                    I_ID VARCHAR(50) PRIMARY KEY,
+                    I_Name VARCHAR(100),
+                    Industry_pref VARCHAR(50),
+                    Budget DECIMAL(15, 2),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                    );''')
+    
+    c.execute(''' CREATE TABLE IF NOT EXISTS Trends(
+                    T_Type VARCHAR(50),
+                    Duration INT,
+                    Impact_level VARCHAR(50),
+                    A_ID VARCHAR(50),
+                    FOREIGN KEY (A_ID) REFERENCES ANALYSTS(A_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS CONTRACTS (
+                    Con_ID VARCHAR(50) PRIMARY KEY,
+                    Con_Type VARCHAR(50),
+                    Validity_period INT,
+                    B_ID VARCHAR(50),
+                    I_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID),
+                    FOREIGN KEY (I_ID) REFERENCES INVESTORS(I_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS LEGAL_ADVISORY (
+                    L_ID VARCHAR(50) PRIMARY KEY,
+                    Adv_Name VARCHAR(100),
+                    L_Experience INT,
+                    Jurisdiction VARCHAR(100),
+                    Con_ID VARCHAR(50),
+                    FOREIGN KEY (Con_ID) REFERENCES CONTRACTS(Con_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS PARTNERSHIP (
+                    P_ID VARCHAR(50) PRIMARY KEY,
+                    P_Name VARCHAR(100),
+                    P_Type VARCHAR(50),
+                    P_Industry VARCHAR(50),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS VENDOR_SUPPLIER (
+                    V_ID VARCHAR(50) PRIMARY KEY,
+                    V_Name VARCHAR(100),
+                    V_Type VARCHAR(50),
+                    Budget DECIMAL(15, 2),
+                    Quality VARCHAR(50),
+                    V_loc VARCHAR(100),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS LOCATION (
+                    LOC_ID VARCHAR(50) PRIMARY KEY,
+                    L_Name VARCHAR(100),
+                    Market_potential VARCHAR(50),
+                    Region VARCHAR(100),
+                    V_ID VARCHAR(50),
+                    FOREIGN KEY (V_ID) REFERENCES VENDOR_SUPPLIER(V_ID)
+                   );''')
+
+    c.execute('''CREATE TABLE IF NOT EXISTS BENEFICIARY (
+                    Ben_ID VARCHAR(50) PRIMARY KEY,
+                    Ben_Name VARCHAR(100),
+                    Age INT,
+                    DOB DATE,
+                    Lease_Term INT,
+                    Mail VARCHAR(100),
+                    Phone VARCHAR(15),
+                    Owner VARCHAR(100),
+                    B_ID VARCHAR(50),
+                    FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
+                   );''')
 
 # Function to add a new business record
 def add_data(b_id, b_name, l_name, f_name, b_type, oo_mail, phone):
@@ -64,3 +164,68 @@ def edit_business_data(new_b_id, new_b_name, new_l_name, new_f_name, new_b_type,
 def delete_data(b_name):
     c.execute('DELETE FROM BUSINESS WHERE B_Name = %s', (b_name,))
     mydb.commit()
+
+
+# Function to fetch recommendations based on the first two letters of the Business ID (B_ID)
+def fetch_recommendations(first_two_letters):
+    recommendations = {}
+
+    # Competitors - Businesses with matching first two letters
+    query = "SELECT B_Name FROM BUSINESS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Competitors"] = c.fetchall()
+
+    # Analysts - Fetch analysts based on the business ID pattern
+    # Assuming `ANALYSTS` table has a `B_ID` foreign key or similar field
+    query = "SELECT A_Name FROM ANALYSTS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Analysts"] = c.fetchall()
+
+    #Trends - Fetch trends based on the business ID pattern
+    query = "SELECT T_Type, Duration, Impact_Level FROM TRENDS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Trends"] = c.fetchall()
+
+    # Investors - Fetch investors associated with businesses that match the first two letters
+    # Assuming `INVESTORS` table has a `B_ID` or similar field
+    query = "SELECT I_Name FROM INVESTORS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Investors"] = c.fetchall()
+
+    # Partnerships - Fetch partnerships based on the business ID pattern
+    # Assuming `PARTNERSHIPS` table has a `B_ID` field
+    query = "SELECT P_Name FROM PARTNERSHIP WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Partnership"] = c.fetchall()
+
+    # Contracts - Fetch contracts linked with the business ID pattern
+    # Assuming `CONTRACTS` table has relevant fields
+    query = "SELECT Con_ID, Con_Type, Validity_Period, I_ID FROM CONTRACTS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Contracts"] = c.fetchall()
+
+    # Legal Advisory - Fetch legal advisors based on business ID pattern
+    # Assuming `LEGAL_ADVISORY` table has a `B_ID` field
+    query = "SELECT L_ID, Adv_Name, L_Experience, Jurisdiction FROM LEGAL_ADVISORY WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Legal_Advisory"] = c.fetchall()
+
+    # Vendor Suppliers - Fetch vendors based on business ID pattern
+    # Assuming `VENDOR_SUPPLIERS` table has a `B_ID` field
+    query = "SELECT V_ID, V_Name, V_Type, Budget, Quality, V_Loc FROM VENDOR_SUPPLIER WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Vendor_Suppliers"] = c.fetchall()
+
+    # Locations - Fetch locations associated with the business ID pattern
+    # Assuming `LOCATIONS` table has a `B_ID` field
+    query = "SELECT Loc_ID, L_Name, Market_Potential, Region FROM LOCATION WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Locations"] = c.fetchall()
+
+    # Beneficiaries - Fetch beneficiaries based on the business ID pattern
+    # Assuming `BENEFICIARIES` table has a `B_ID` field
+    query = "SELECT Ben_ID, Ben_Name, Age, DOB, Lease_Term, Mail, Phone, Owner FROM BENEFICIARY WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Beneficiaries"] = c.fetchall()
+
+    return recommendations

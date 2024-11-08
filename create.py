@@ -17,4 +17,3 @@ def create():
         # Call the add_data function with the inputs for the Business table
         add_data(b_id, b_name, l_name, f_name, b_type, oo_mail, phone)
         st.success(f"Successfully added Business: {b_name}")
-

@@ -20,4 +20,3 @@ def read():
         # Bar chart for business type distribution
         bar_chart = px.bar(business_type_df, x='Business Type', y='Count', title="Number of Businesses by Type", color='Business Type')
         st.plotly_chart(bar_chart)
-
