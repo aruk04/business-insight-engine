@@ -182,12 +182,12 @@ def fetch_recommendations(first_two_letters):
     recommendations["Analysts"] = c.fetchall()
 
     #Trends - Fetch trends based on the business ID pattern
-    query = "SELECT T_Type, Duration, Impact_Level FROM TRENDS WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Trends"] = c.fetchall()
+    #query = "SELECT T_Type, Duration, Impact_Level FROM TRENDS WHERE LEFT(B_ID, 2) = %s"
+    #c.execute(query, (first_two_letters,))
+    #recommendations["Trends"] = c.fetchall()
 
     # Investors - Fetch investors associated with businesses that match the first two letters
-    # Assuming `INVESTORS` table has a `B_ID` or similar field
+   
     query = "SELECT I_Name FROM INVESTORS WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Investors"] = c.fetchall()
