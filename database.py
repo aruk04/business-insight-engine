@@ -176,7 +176,7 @@ def fetch_recommendations(first_two_letters):
     recommendations["Competitors"] = c.fetchall()
 
     # Analysts - Fetch analysts based on the business ID pattern
-    # Assuming `ANALYSTS` table has a `B_ID` foreign key or similar field
+    
     query = "SELECT A_Name FROM ANALYSTS WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Analysts"] = c.fetchall()
@@ -193,34 +193,33 @@ def fetch_recommendations(first_two_letters):
     recommendations["Investors"] = c.fetchall()
 
     # Partnerships - Fetch partnerships based on the business ID pattern
-    # Assuming `PARTNERSHIPS` table has a `B_ID` field
+    
     query = "SELECT P_Name FROM PARTNERSHIP WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Partnership"] = c.fetchall()
 
     # Contracts - Fetch contracts linked with the business ID pattern
-    # Assuming `CONTRACTS` table has relevant fields
+    
     query = "SELECT Con_ID, Con_Type, Validity_Period, I_ID FROM CONTRACTS WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Contracts"] = c.fetchall()
 
     # Legal Advisory - Fetch legal advisors based on business ID pattern
-    # Assuming `LEGAL_ADVISORY` table has a `B_ID` field
+    
     query = "SELECT L_ID, Adv_Name, L_Experience, Jurisdiction FROM LEGAL_ADVISORY WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Legal_Advisory"] = c.fetchall()
 
     # Vendor Suppliers - Fetch vendors based on business ID pattern
-    # Assuming `VENDOR_SUPPLIERS` table has a `B_ID` field
+    
     query = "SELECT V_ID, V_Name, V_Type, Budget, Quality, V_Loc FROM VENDOR_SUPPLIER WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Vendor_Suppliers"] = c.fetchall()
 
     # Locations - Fetch locations associated with the business ID pattern
-    # Assuming `LOCATIONS` table has a `B_ID` field
-    query = "SELECT Loc_ID, L_Name, Market_Potential, Region FROM LOCATION WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Locations"] = c.fetchall()
+
+    ##c.execute(query, (first_two_letters,))
+    #recommendations["Locations"] = c.fetchall()
 
     # Beneficiaries - Fetch beneficiaries based on the business ID pattern
     # Assuming `BENEFICIARIES` table has a `B_ID` field
