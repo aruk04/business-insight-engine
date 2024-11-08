@@ -229,3 +229,7 @@ def fetch_recommendations(first_two_letters):
     recommendations["Beneficiaries"] = c.fetchall()
 
     return recommendations
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2048e5288f377d545a46848cadce0c3c4824f2c9
