@@ -64,3 +64,19 @@ def edit_business_data(new_b_id, new_b_name, new_l_name, new_f_name, new_b_type,
 def delete_data(b_name):
     c.execute('DELETE FROM BUSINESS WHERE B_Name = %s', (b_name,))
     mydb.commit()
+
+
+# Function to fetch recommendations based on the first two letters of the Business ID
+def fetch_recommendations(first_two_letters):
+    recommendations = {}
+    
+    # Example queries to fetch data based on the first two letters of Business ID
+    # Adjust as per your database schema and requirements
+    query = "SELECT B_Name FROM BUSINESS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Competitors"] = c.fetchall()
+    
+    # Repeat similar queries for other recommendation categories
+    # e.g., Analysts, Investors, Partnerships, etc.
+
+    return recommendations
