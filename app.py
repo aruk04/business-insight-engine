@@ -15,12 +15,12 @@ mydb = mysql.connector.connect(
     password="arushisql@p35"
 )
 
-def get_first_two_letters(b_id):
+def get_first_two_letters(business_id):
     """
     Extracts the first two letters of the business ID,
     ignoring any underscore and numbers.
     """
-    return ''.join([char for char in b_id[:2] if char.isalpha()])
+    return ''.join([char for char in business_id[:2] if char.isalpha()])
 
 def main():
     st.title("SMART BUSINESS INSIGHT ENGINE")
@@ -52,7 +52,7 @@ def main():
         if st.button("Fetch Recommendations"):
             if business_id:
                 # Extract the first two letters for recommendation filtering
-                first_two_letters = get_first_two_letters(b_id)
+                first_two_letters = get_first_two_letters(business_id)
                 recommendations = fetch_recommendations(first_two_letters)
                 
                 if recommendations:
