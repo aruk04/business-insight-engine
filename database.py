@@ -66,17 +66,62 @@ def delete_data(b_name):
     mydb.commit()
 
 
-# Function to fetch recommendations based on the first two letters of the Business ID
+# Function to fetch recommendations based on the first two letters of the Business ID (B_ID)
 def fetch_recommendations(first_two_letters):
     recommendations = {}
-    
-    # Example queries to fetch data based on the first two letters of Business ID
-    # Adjust as per your database schema and requirements
+
+    # Competitors - Businesses with matching first two letters
     query = "SELECT B_Name FROM BUSINESS WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Competitors"] = c.fetchall()
-    
-    # Repeat similar queries for other recommendation categories
-    # e.g., Analysts, Investors, Partnerships, etc.
+
+    # Analysts - Fetch analysts based on the business ID pattern
+    # Assuming `ANALYSTS` table has a `B_ID` foreign key or similar field
+    query = "SELECT Analyst_Name FROM ANALYSTS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Analysts"] = c.fetchall()
+
+    # Investors - Fetch investors associated with businesses that match the first two letters
+    # Assuming `INVESTORS` table has a `B_ID` or similar field
+    query = "SELECT Investor_Name FROM INVESTORS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Investors"] = c.fetchall()
+
+    # Partnerships - Fetch partnerships based on the business ID pattern
+    # Assuming `PARTNERSHIPS` table has a `B_ID` field
+    query = "SELECT Partner_Name FROM PARTNERSHIPS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Partnerships"] = c.fetchall()
+
+    # Contracts - Fetch contracts linked with the business ID pattern
+    # Assuming `CONTRACTS` table has relevant fields
+    query = "SELECT Contract_ID, Contract_Type, Validity_Period, Investor_ID FROM CONTRACTS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Contracts"] = c.fetchall()
+
+    # Legal Advisory - Fetch legal advisors based on business ID pattern
+    # Assuming `LEGAL_ADVISORY` table has a `B_ID` field
+    query = "SELECT Legal_Advisor_ID, Advisor_Name, Experience, Jurisdiction FROM LEGAL_ADVISORY WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Legal_Advisory"] = c.fetchall()
+
+    # Vendor Suppliers - Fetch vendors based on business ID pattern
+    # Assuming `VENDOR_SUPPLIERS` table has a `B_ID` field
+    query = "SELECT Vendor_ID, Vendor_Name, Type, Budget, Quality, Location FROM VENDOR_SUPPLIERS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Vendor_Suppliers"] = c.fetchall()
+
+    # Locations - Fetch locations associated with the business ID pattern
+    # Assuming `LOCATIONS` table has a `B_ID` field
+    query = "SELECT Location_ID, Location_Name, Market_Potential, Region FROM LOCATIONS WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Locations"] = c.fetchall()
+
+    # Beneficiaries - Fetch beneficiaries based on the business ID pattern
+    # Assuming `BENEFICIARIES` table has a `B_ID` field
+    query = "SELECT Beneficiary_ID, Name, Age, DOB, Lease_Term, Email, Phone, Owner FROM BENEFICIARIES WHERE LEFT(B_ID, 2) = %s"
+    c.execute(query, (first_two_letters,))
+    recommendations["Beneficiaries"] = c.fetchall()
 
     return recommendations
+
