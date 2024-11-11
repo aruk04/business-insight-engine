@@ -213,3 +213,5 @@ def fetch_recommendations(cursor, b_id):
 
     return recommendations
 
+recommendations = fetch_recommendations(c, 'FC_1')
+
