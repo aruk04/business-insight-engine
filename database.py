@@ -167,50 +167,49 @@ def delete_data(b_name):
 
 
 
-# Function to fetch recommendations based on the first two letters of the Business ID (B_ID)
-def fetch_recommendations(b_id):
+def fetch_recommendations(cursor, b_id):
     first_two_letters = b_id[:2]  # Extract the first two characters
     recommendations = {}
 
     # Competitors - Businesses with matching first two letters
     query = "SELECT B_Name FROM BUSINESS WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Competitors"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Competitors"] = cursor.fetchall()
 
     # Analysts
     query = "SELECT A_Name FROM ANALYSTS WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Analysts"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Analysts"] = cursor.fetchall()
 
     # Investors
     query = "SELECT I_Name FROM INVESTORS WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Investors"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Investors"] = cursor.fetchall()
 
     # Partnerships
     query = "SELECT P_Name FROM PARTNERSHIP WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Partnership"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Partnership"] = cursor.fetchall()
 
     # Contracts
     query = "SELECT Con_ID, Con_Type, Validity_Period, I_ID FROM CONTRACTS WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Contracts"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Contracts"] = cursor.fetchall()
 
     # Legal Advisory
     query = "SELECT L_ID, Adv_Name, L_Experience, Jurisdiction FROM LEGAL_ADVISORY WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Legal_Advisory"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Legal_Advisory"] = cursor.fetchall()
 
     # Vendor Suppliers
     query = "SELECT V_ID, V_Name, V_Type, Budget, Quality, V_Loc FROM VENDOR_SUPPLIER WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Vendor_Suppliers"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Vendor_Suppliers"] = cursor.fetchall()
 
     # Beneficiaries
     query = "SELECT Ben_ID, Ben_Name, Age, DOB, Lease_Term, Mail, Phone, Owner FROM BENEFICIARY WHERE LEFT(B_ID, 2) = %s"
-    c.execute(query, (first_two_letters,))
-    recommendations["Beneficiaries"] = c.fetchall()
+    cursor.execute(query, (first_two_letters,))
+    recommendations["Beneficiaries"] = cursor.fetchall()
 
     return recommendations
 
