@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st #type: ignore
 from database import add_data
 
 def create():

@@ -1,5 +1,5 @@
-import pandas as pd
-import streamlit as st
+import pandas as pd #type: ignore
+import streamlit as st #type: ignore
 from database import view_all_data, view_only_business_names, get_business, edit_business_data
 
 def update():

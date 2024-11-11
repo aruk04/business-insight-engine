@@ -166,8 +166,10 @@ def delete_data(b_name):
     mydb.commit()
 
 
+
 # Function to fetch recommendations based on the first two letters of the Business ID (B_ID)
-def fetch_recommendations(first_two_letters):
+def fetch_recommendations(b_id):
+    first_two_letters = b_id[:2]  # Extract the first two characters
     recommendations = {}
 
     # Competitors - Businesses with matching first two letters
@@ -175,56 +177,40 @@ def fetch_recommendations(first_two_letters):
     c.execute(query, (first_two_letters,))
     recommendations["Competitors"] = c.fetchall()
 
-    # Analysts - Fetch analysts based on the business ID pattern
-    
+    # Analysts
     query = "SELECT A_Name FROM ANALYSTS WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Analysts"] = c.fetchall()
 
-    #Trends - Fetch trends based on the business ID pattern
-    #query = "SELECT T_Type, Duration, Impact_Level FROM TRENDS WHERE LEFT(B_ID, 2) = %s"
-    #c.execute(query, (first_two_letters,))
-    #recommendations["Trends"] = c.fetchall()
-
-    # Investors - Fetch investors associated with businesses that match the first two letters
-   
+    # Investors
     query = "SELECT I_Name FROM INVESTORS WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Investors"] = c.fetchall()
 
-    # Partnerships - Fetch partnerships based on the business ID pattern
-    
+    # Partnerships
     query = "SELECT P_Name FROM PARTNERSHIP WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Partnership"] = c.fetchall()
 
-    # Contracts - Fetch contracts linked with the business ID pattern
-    
+    # Contracts
     query = "SELECT Con_ID, Con_Type, Validity_Period, I_ID FROM CONTRACTS WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Contracts"] = c.fetchall()
 
-    # Legal Advisory - Fetch legal advisors based on business ID pattern
-    
+    # Legal Advisory
     query = "SELECT L_ID, Adv_Name, L_Experience, Jurisdiction FROM LEGAL_ADVISORY WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Legal_Advisory"] = c.fetchall()
 
-    # Vendor Suppliers - Fetch vendors based on business ID pattern
-    
+    # Vendor Suppliers
     query = "SELECT V_ID, V_Name, V_Type, Budget, Quality, V_Loc FROM VENDOR_SUPPLIER WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Vendor_Suppliers"] = c.fetchall()
 
-    # Locations - Fetch locations associated with the business ID pattern
-
-    ##c.execute(query, (first_two_letters,))
-    #recommendations["Locations"] = c.fetchall()
-
-    # Beneficiaries - Fetch beneficiaries based on the business ID pattern
-    # Assuming `BENEFICIARIES` table has a `B_ID` field
+    # Beneficiaries
     query = "SELECT Ben_ID, Ben_Name, Age, DOB, Lease_Term, Mail, Phone, Owner FROM BENEFICIARY WHERE LEFT(B_ID, 2) = %s"
     c.execute(query, (first_two_letters,))
     recommendations["Beneficiaries"] = c.fetchall()
 
     return recommendations
+
