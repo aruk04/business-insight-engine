@@ -14,6 +14,7 @@ mydb = mysql.connector.connect(
     user="root",
     password="arushisql@p35"
 )
+c = mydb.cursor()
 
 def get_first_two_letters(business_id):
     """
@@ -27,23 +28,23 @@ def main():
     menu = ["Add", "View", "Edit", "Remove", "Give Recommendations"]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    create_table()  # Ensure tables are created if they don't exist
+    create_table(c)  # Ensure tables are created if they don't exist
 
     if choice == "Add":
         st.subheader("Enter Business Details:")
-        create()
+        create(c, mydb)
 
     elif choice == "View":
         st.subheader("View created details")
-        read()
+        read(c)
 
     elif choice == "Edit":
         st.subheader("Update created details")
-        update()
+        update(c, mydb)
 
     elif choice == "Remove":
         st.subheader("Delete created details")
-        delete()
+        delete(c, mydb)
 
     elif choice == "Give Recommendations":
         st.subheader("Business Recommendations")
@@ -53,7 +54,7 @@ def main():
             if business_id:
                 # Extract the first two letters for recommendation filtering
                 first_two_letters = get_first_two_letters(business_id)
-                recommendations = fetch_recommendations(first_two_letters)
+                recommendations = fetch_recommendations(c, first_two_letters)
                 
                 if recommendations:
                     # Display each entity's records in separate tables
@@ -71,18 +72,18 @@ def main():
                             elif table == "Partnership":
                                 df = pd.DataFrame(records, columns=["P_Name"])
                             elif table == "Contracts":
-                                df = pd.DataFrame(records, columns=["Con_ID", "Con_Type", "Validity Period", "I_ID"])
+                                df = pd.DataFrame(records, columns=["Con_ID", "Con_Type", "Validity_period", "I_ID"])
                             elif table == "Legal_Advisory":
                                 df = pd.DataFrame(records, columns=["L_ID", "Adv_Name", "L_Experience", "Jurisdiction"])
                             elif table == "Vendor_Supplier":
-                                df = pd.DataFrame(records, columns=["V_ID", "V_Name", "V_Type", "Budget", "Quality", "V_Loc"])
+                                df = pd.DataFrame(records, columns=["V_ID", "V_Name", "V_Type", "Budget", "Quality", "V_loc"])
                             elif table == "Location":
-                                df = pd.DataFrame(records, columns=["Loc_ID", "L_Name", "Market_Potential", "Region"])
+                                df = pd.DataFrame(records, columns=["LOC_ID", "L_Name", "Market_potential", "Region"])
                             elif table == "Beneficiary":
                                 df = pd.DataFrame(records, columns=["Ben_ID", "Ben_Name", "Age", "DOB", "Lease_Term", "Mail", "Phone", "Owner"])
                             
                             # Display the DataFrame in Streamlit as a table
-                            st.dataframe(df)  # Or use st.table(df) for a static table
+                            st.dataframe(df)  
                         else:
                             st.write(f"**{table}**")
                             st.write("No records found.")
