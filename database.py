@@ -210,5 +210,13 @@ def fetch_recommendations(cursor, b_id):
     query = "SELECT Ben_ID, Ben_Name, Age, DOB, Lease_Term, Mail, Phone, Owner FROM BENEFICIARY WHERE LEFT(B_ID, 2) = %s"
     cursor.execute(query, (first_two_letters,))
     recommendations["Beneficiaries"] = cursor.fetchall()
+<<<<<<< HEAD
 
     return recommendations
+=======
+
+    return recommendations
+
+
+
+>>>>>>> 229804df33ca9e09771ecc7cdda4863d8a89fb10
