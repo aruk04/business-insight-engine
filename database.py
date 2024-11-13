@@ -52,7 +52,8 @@ def create_table():
                     Budget DECIMAL(15, 2),
                     B_ID VARCHAR(50),
                     FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
-                    );''')
+        );
+    ''')
     
     c.execute(''' CREATE TABLE IF NOT EXISTS Trends(
                     T_Type VARCHAR(50),
@@ -60,7 +61,8 @@ def create_table():
                     Impact_level VARCHAR(50),
                     A_ID VARCHAR(50),
                     FOREIGN KEY (A_ID) REFERENCES ANALYSTS(A_ID)
-                   );''')
+        );
+    ''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS Contracts (
                     Con_ID VARCHAR(50) PRIMARY KEY,
@@ -70,7 +72,8 @@ def create_table():
                     I_ID VARCHAR(50),
                     FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID),
                     FOREIGN KEY (I_ID) REFERENCES INVESTORS(I_ID)
-                   );''')
+        );
+    ''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS Legal_Advisory (
                     L_ID VARCHAR(50) PRIMARY KEY,
@@ -79,7 +82,8 @@ def create_table():
                     Jurisdiction VARCHAR(100),
                     Con_ID VARCHAR(50),
                     FOREIGN KEY (Con_ID) REFERENCES CONTRACTS(Con_ID)
-                   );''')
+        );
+    ''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS Partnership (
                     P_ID VARCHAR(50) PRIMARY KEY,
@@ -88,7 +92,8 @@ def create_table():
                     P_Industry VARCHAR(50),
                     B_ID VARCHAR(50),
                     FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
-                   );''')
+        );
+    ''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS Vendor_Supplier (
                     V_ID VARCHAR(50) PRIMARY KEY,
@@ -99,7 +104,9 @@ def create_table():
                     V_loc VARCHAR(100),
                     B_ID VARCHAR(50),
                     FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
-                   );''')
+                   
+        );
+    ''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS Location (
                     LOC_ID VARCHAR(50) PRIMARY KEY,
@@ -108,7 +115,8 @@ def create_table():
                     Region VARCHAR(100),
                     V_ID VARCHAR(50),
                     FOREIGN KEY (V_ID) REFERENCES VENDOR_SUPPLIER(V_ID)
-                   );''')
+        );
+    ''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS Beneficiary (
                     Ben_ID VARCHAR(50) PRIMARY KEY,
@@ -121,7 +129,8 @@ def create_table():
                     Owner VARCHAR(100),
                     B_ID VARCHAR(50),
                     FOREIGN KEY (B_ID) REFERENCES BUSINESS(B_ID)
-                   );''')
+        );
+    ''')
 
 # Function to add a new business record
 def add_data(b_id, b_name, l_name, f_name, b_type, oo_mail, phone):
@@ -167,8 +176,8 @@ def delete_data(b_name):
 
 
 
-def fetch_recommendations(cursor, b_id):
-    first_two_letters = b_id[:2]  # Extract the first two characters
+def fetch_recommendations(cursor, B_ID):
+    first_two_letters = B_ID[:2]  # Extract the first two characters
     recommendations = {}
 
     # Competitors - Businesses with matching first two letters
@@ -210,13 +219,8 @@ def fetch_recommendations(cursor, b_id):
     query = "SELECT Ben_ID, Ben_Name, Age, DOB, Lease_Term, Mail, Phone, Owner FROM BENEFICIARY WHERE LEFT(B_ID, 2) = %s"
     cursor.execute(query, (first_two_letters,))
     recommendations["Beneficiaries"] = cursor.fetchall()
-<<<<<<< HEAD
-
-    return recommendations
-=======
-
+    
+    
     return recommendations
 
-
-
->>>>>>> 229804df33ca9e09771ecc7cdda4863d8a89fb10
+    # return recommendations
