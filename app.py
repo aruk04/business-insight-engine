@@ -23,7 +23,7 @@ def init_connection():
         host="localhost",
         database="sbie",
         user="root",
-        password="arushisql@p35"
+        password="************"
     )
 
 def verify_login(cursor, username, password, role):
